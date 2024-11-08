@@ -16,11 +16,6 @@ jobs:
           node-version: 20
           cache: 'pnpm'
           cache-dependency-path: pnpm-lock.yaml
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.pnpm
-          key: deps-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
       - name: Install dependencies
         run: pnpm install
       - name: Lint
@@ -43,11 +38,6 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 9
-      - name: Cache dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.pnpm
-          key: deps-node-modules-${{ hashFiles('**/pnpm-lock.yaml') }}
       - name: Install dependencies
         run: pnpm install
       - name: Build project
