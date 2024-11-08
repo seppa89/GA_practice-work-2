@@ -10,12 +10,20 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 9
+      - name: Get pnpm store directory
+        shell: bash
+        run: echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
       - name: Install Node v20
         uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'pnpm'
           cache-dependency-path: pnpm-lock.yaml
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: "deps-node-modules-${{hashFiles('**/pnpm-lock.yaml')}}"
       - name: Install dependencies
         run: pnpm install
       - name: Lint
@@ -38,6 +46,11 @@ jobs:
         uses: pnpm/action-setup@v4
         with:
           version: 9
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: "deps-node-modules-${{hashFiles('**/pnpm-lock.yaml')}}"
       - name: Install dependencies
         run: pnpm install
       - name: Build project
